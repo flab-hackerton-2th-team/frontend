@@ -1,12 +1,11 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { Box, Center, CircularProgress, CircularProgressLabel, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Progress } from "@chakra-ui/react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { Box,  Flex, } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
 
 import InterviewerProfile from "./_components/InterviewerProfile";
 import { initializeChatState } from "@/store/redux/features/chat/slice";
-import AnimatedProgressBar from "./_components/AnimatedProgressBar";
 
 const InterviewerProfileWrapper = ({
   children,
@@ -32,12 +31,7 @@ export default function Page() {
   const dispatch = useDispatch();
   // const { user, isLoggedIn, setUser, clearUser } = useUserStore();
 
-  useEffect(() => {
-    return () => {
-      dispatch(initializeChatState(null));
-    };
-  }, []);
-
+ 
   return (
     <Box
       width={"100%"}
@@ -49,6 +43,7 @@ export default function Page() {
       <InterviewerProfileWrapper>
         <InterviewerProfile />
       </InterviewerProfileWrapper>
+
       <Flex direction="column" alignItems="center" width="100%" mt={8}>
         <Box
           display="flex"
