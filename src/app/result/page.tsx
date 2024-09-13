@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { Box, CircularProgress, CircularProgressLabel, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Progress } from "@chakra-ui/react";
+import { Box, Center, CircularProgress, CircularProgressLabel, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Progress } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 
 import InterviewerProfile from "./_components/InterviewerProfile";
@@ -52,11 +52,9 @@ export default function Page() {
       <Flex direction="column" alignItems="center" width="100%" mt={8}>
         <Box
           display="flex"
-          flexDirection="column"
-          alignItems="center"
+          alignItems="baseline"
           justifyContent="center"
           width="100%"
-          height="40x"
           gap={"10px"}
           mb={6}
         >
@@ -69,9 +67,22 @@ export default function Page() {
             엘론 머스크의 평가
           </div>
 
-          <Box position="relative" width="80%" height="40px">
-            <AnimatedProgressBar percent={85}/>
+          <Flex alignItems="baseline">
+            
+          <Box 
+            fontSize={"3rem"} 
+            fontWeight={"medium"}
+            style={{
+              background: "linear-gradient(135deg, #6B46C1, #4299E1)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              textShadow: "2px 2px 4px rgba(107, 70, 193, 0.5)"
+            }}
+          >
+            85
           </Box>
+            <Box fontSize={"2rem"} fontWeight={"medium"} color={"#1A202C"}>점</Box>
+          </Flex>
         </Box>
         
         <Flex justifyContent="center" flexWrap="wrap" gap={4}>
