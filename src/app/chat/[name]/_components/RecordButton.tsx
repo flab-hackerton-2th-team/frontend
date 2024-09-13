@@ -2,8 +2,9 @@ import { useRef, useState, useEffect } from "react";
 import { detectSilence } from "../_utils";
 
 import Recorder from "recorder-js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SEND_RECORD } from "@/store/redux/features/chat/slice";
+import { selectChatStatus } from "@/store/redux/features/chat/selector";
 
 import Avatar from "@/components/Avatar";
 
@@ -13,6 +14,7 @@ export default function RecordButton() {
     "recording" | "finished" | null
   >(null);
   const dispatch = useDispatch();
+  const chatStatus = useSelector(selectChatStatus);
 
   const handleRecord = async () => {
     if (isRecording === "recording" || isRecording === "finished") return;
@@ -91,6 +93,7 @@ export default function RecordButton() {
   };
 
   return (
+    // chatStatus가 finished면 버튼을 다음 평가 버튼으로 바꿈
     <Avatar
       width={"40px"}
       height={"40px"}

@@ -65,8 +65,12 @@ export default function Page() {
   const chatContents = useSelector(selectChat);
   const dispatch = useDispatch();
   // const { user, isLoggedIn, setUser, clearUser } = useUserContext();
+  // const { interviewer } = useInterviewerStore();
 
   useEffect(() => {
+    // user.id, interviewerId 로 채팅 시작
+    // POST, interview
+
     return () => {
       dispatch(initializeChatState(null));
     };
@@ -84,6 +88,8 @@ export default function Page() {
         <InterviewerProfile />
       </InterviewerProfileWrapper>
       <ChatWrapper>
+        {/*  시작 버튼, 처음 지정된 메시지로 dispatch */}
+
         {chatContents.map(({ speaker, content, status, timeStamp }) => {
           return (
             <ChatArticle type={speaker}>
