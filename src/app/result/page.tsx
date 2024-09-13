@@ -42,6 +42,7 @@ export default function Page() {
     }
   });
 
+  const reviewerName = "엘론 머스크"
   // const { user, isLoggedIn, setUser, clearUser } = useUserStore();
 
   const totalScore: number = useMemo(() => {
@@ -61,25 +62,29 @@ export default function Page() {
       display="flex"
       flexDirection={"column"}
     >
-      <InterviewerProfileWrapper>
-        <InterviewerProfile />
-      </InterviewerProfileWrapper>
 
-      {isLoading? <Flex 
-      direction="column"
-      justifyItems="center"
-      alignItems="center" mt={8} gap={10}
-      width="100%" height="100%" >
-        <div style={{ 
-          fontSize: "2.5rem", 
-          fontWeight: "medium", 
-          color: "#1A202C", // A very dark blue-black color
-          textShadow: "1px 2px 2px #1A202C" // Subtle blue shadow for a blue feeling
-        }}>
-          엘론 머스크는 평가 중
-        </div>
-        <Spinner />
-      </Flex> : 
+      {isLoading? 
+        <>
+          <InterviewerProfileWrapper>
+            <InterviewerProfile />
+          </InterviewerProfileWrapper>
+          <Flex 
+          direction="column"
+          justifyItems="center"
+          alignItems="center" mt={8} gap={10}
+          width="100%" height="100%" >
+            <div style={{ 
+              fontSize: "2.5rem", 
+              fontWeight: "medium", 
+              color: "#1A202C", // A very dark blue-black color
+              textShadow: "1px 2px 2px #1A202C" // Subtle blue shadow for a blue feeling
+            }}>
+              {reviewerName}는 평가 중
+            </div>
+            <Spinner />
+          </Flex> 
+        </>
+      : 
       
       <Flex direction="column" alignItems="center" width="100%" mt={8}>
         <Box
@@ -96,7 +101,7 @@ export default function Page() {
             color: "#1A202C", // A very dark blue-black color
             textShadow: "1px 2px 2px #1A202C" // Subtle blue shadow for a blue feeling
           }}>
-            엘론 머스크가 평가한 당신은
+            {reviewerName}가 평가한 당신은
           </div>
 
           <Flex alignItems="baseline">
@@ -184,7 +189,7 @@ export default function Page() {
             pb={2}
             mb={4}
           >
-            엘론 머스크의 한마디
+            {reviewerName}의 한마디
           </Box>
           
           <br />
