@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Box,  Flex, } from "@chakra-ui/react";
-import { useDispatch } from "react-redux";
+import { useState, useMemo } from "react";
+import { Box,  Flex, Spinner } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
 
 import InterviewerProfile from "./_components/InterviewerProfile";
-import { initializeChatState } from "@/store/redux/features/chat/slice";
+import { useQuery } from "@tanstack/react-query"
+import { selectChatId } from '@/store/redux/features/chat/selector.ts';
 
 const InterviewerProfileWrapper = ({
   children,
@@ -27,9 +28,29 @@ const InterviewerProfileWrapper = ({
 };
 
 export default function Page() {
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
-  const dispatch = useDispatch();
+  const chatId = useSelector(selectChatId) ?? 2;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['result', chatId],
+    queryFn: () => {
+      return fetch(`http://localhost:3001/interview/${chatId}/result`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(res => res.json())
+    }
+  });
+
   // const { user, isLoggedIn, setUser, clearUser } = useUserStore();
+
+  const totalScore: number = useMemo(() => {
+    if(!data?.scores) {
+      return 0;
+    }
+
+    return data.scores.reduce((acc, {score}) => acc + score, 0);
+  }, [data]);
 
  
   return (
@@ -44,6 +65,22 @@ export default function Page() {
         <InterviewerProfile />
       </InterviewerProfileWrapper>
 
+      {isLoading? <Flex 
+      direction="column"
+      justifyItems="center"
+      alignItems="center" mt={8} gap={10}
+      width="100%" height="100%" >
+        <div style={{ 
+          fontSize: "2.5rem", 
+          fontWeight: "medium", 
+          color: "#1A202C", // A very dark blue-black color
+          textShadow: "1px 2px 2px #1A202C" // Subtle blue shadow for a blue feeling
+        }}>
+          엘론 머스크는 평가 중
+        </div>
+        <Spinner />
+      </Flex> : 
+      
       <Flex direction="column" alignItems="center" width="100%" mt={8}>
         <Box
           display="flex"
@@ -59,7 +96,7 @@ export default function Page() {
             color: "#1A202C", // A very dark blue-black color
             textShadow: "1px 2px 2px #1A202C" // Subtle blue shadow for a blue feeling
           }}>
-            엘론 머스크의 평가
+            엘론 머스크가 평가한 당신은
           </div>
 
           <Flex alignItems="baseline">
@@ -74,28 +111,21 @@ export default function Page() {
               textShadow: "2px 2px 4px rgba(107, 70, 193, 0.5)"
             }}
           >
-            85
+            {totalScore}
           </Box>
             <Box fontSize={"2rem"} fontWeight={"medium"} color={"#1A202C"}>점</Box>
           </Flex>
         </Box>
         
         <Flex justifyContent="center" flexWrap="wrap" gap={4}>
-          {[
-            { title: "Communication", score: 18 },
-            { title: "Technical Skills", score: 17 },
-            { title: "Problem Solving", score: 16 },
-            { title: "Teamwork", score: 17 },
-            { title: "Creativity", score: 17 },
-          ].map((item, index) => (
+          {data.scores.map(({standard, score,summary}, index) => (
             <Box
-              key={index}
+              key={standard}
               width="100%"
               borderWidth={1}
               borderRadius="lg"
               p={4}
               cursor="pointer"
-              onClick={() => setSelectedCard(item.title)}
               _hover={{ boxShadow: "0 0 10px 0 rgba(66, 153, 225, 0.5)" }}
               bg="white"
               display="flex"
@@ -121,7 +151,7 @@ export default function Page() {
                   mr={{ base: 3, md: 4 }}
                   boxShadow="0 4px 6px rgba(107, 70, 193, 0.3)"
                 >
-                  {item.score}
+                  {score}
                 </Box>
                 <Box flex={1}>
                   <Box
@@ -130,17 +160,39 @@ export default function Page() {
                     color="gray.700"
                     mb={1}
                   >
-                    {item.title}
+                    {standard}
                   </Box>
                   <Box fontSize="sm" color="gray.500">
-                    {`Description for ${item.title.toLowerCase()} goes here.`}
+                    {summary}
                   </Box>
                 </Box>
               </Flex>
             </Box>
           ))}
         </Flex>
+
+        <Box padding={10}> 
+          <Box
+            fontSize="2xl"
+            fontWeight="bold"
+            color="purple.600"
+            textAlign="center"
+            textTransform="uppercase"
+            letterSpacing="wide"
+            borderBottom="4px solid"
+            borderColor="purple.400"
+            pb={2}
+            mb={4}
+          >
+            엘론 머스크의 한마디
+          </Box>
+          
+          <br />
+
+          {data.finalEvaluation}
+        </Box>
       </Flex>
+      }
     </Box>
   );
 }
