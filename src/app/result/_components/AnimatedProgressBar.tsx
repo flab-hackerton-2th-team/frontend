@@ -25,7 +25,7 @@ const AnimatedProgressBar = ({percent}: {percent: number }) => {
           style={{
             width: props.width,
             height: '100%',
-            background: 'linear-gradient(90deg, #3182CE 0%, #63B3ED 100%)',
+            background: "linear-gradient(135deg, #6B46C1, #4299E1)",
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             transition: 'width 0.3s ease-in-out',
           }}
